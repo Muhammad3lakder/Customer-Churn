@@ -33,7 +33,7 @@ library(broom)
 
 # Abstract
 
-This research examines the factors that lead to customer churn in the telecommunications industry, with a case study of a telecommunications company. Using exploratory data analysis and predictive modeling, key variables such as SMS usage, calling plan, and customer age group are examined for their impact on churn. Logistic regression modeling with cross-validation provides insight into the accuracy of churn prediction and guides targeted retention strategies. Limitations and future enhancements to improve model accuracy and practical application are discussed.
+Imagine a telecom provider losing 5% of its customers monthly, one way is to research examine the factors that lead to customer churn in the telecommunications industry, we did that with a case study of a telecommunications company. Using exploratory data analysis and predictive modeling, key variables such as SMS usage, calling plan, and customer age group are examined for their impact on churn. Logistic regression modeling with cross-validation provides insight into the accuracy of churn prediction and guides targeted retention strategies. Limitations and future enhancements to improve model accuracy and practical application are discussed.
 
 
 
@@ -135,7 +135,7 @@ kable(
 
 
 
-## Exploratory data analysis
+## Exploratory data analysis (Why Customers Leave?)
 
 - Identifying a criteria that distinguishes customers is our goal in this section.
 
@@ -310,7 +310,7 @@ kable(cor_matrix, , digits = 2, caption = "The correlation between frequecy of u
 
 
 
-## Statistical analysis
+## Statistical analysis (What We Discovered?)
 
 - **Assessing the significance in differences**
 
@@ -453,7 +453,7 @@ kable(model_tidy, caption = "A table for logistic regression based-model") |>
 **Linearity**: Which for this condition to work linear relationship between logit and predictor variables needs to exist:
 
 
-```{r, echo=F, warning=F}
+```{r, echo=F, warning=F, fig.cap="Model assumptions"}
 set.seed(123)
 
 # Check the model assumptions
