@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.26)  26 OCT 2024 17:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.10.26)  26 OCT 2024 18:13
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -568,26 +568,20 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 99.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (./CustomerChurn.toc
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 3.
+(Font)              <10> on input line 4.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 3.
+(Font)              <7> on input line 4.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 3.
+(Font)              <5> on input line 4.
 )
 \tf@toc=\write3
 \openout3 = `CustomerChurn.toc'.
 
 
-Overfull \hbox (1.62415pt too wide) in paragraph at lines 142--143
- []\T1/lmr/m/n/10 Complains
- []
 
+[1
 
-Overfull \hbox (5.46162pt too wide) in paragraph at lines 146--147
- []\T1/lmr/m/n/10 Charge..Amount
- []
-
-
+{/home/muhammad/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/home/muhammad/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}]
 Overfull \hbox (1.62415pt too wide) in paragraph at lines 158--159
  []\T1/lmr/m/n/10 Complains
  []
@@ -597,100 +591,108 @@ Overfull \hbox (5.46162pt too wide) in paragraph at lines 162--163
  []\T1/lmr/m/n/10 Charge..Amount
  []
 
-[1
 
-{/home/muhammad/.TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/home/muhammad/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}]
-Overfull \hbox (16.88393pt too wide) in alignment at lines 181--192
+Overfull \hbox (1.62415pt too wide) in paragraph at lines 174--175
+ []\T1/lmr/m/n/10 Complains
+ []
+
+
+Overfull \hbox (5.46162pt too wide) in paragraph at lines 178--179
+ []\T1/lmr/m/n/10 Charge..Amount
+ []
+
+
+Overfull \hbox (16.88393pt too wide) in alignment at lines 197--208
  [] [] [] [] [] [] 
  []
 
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 225.
+[2]
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 241.
 (/home/muhammad/.TinyTeX/texmf-dist/tex/latex/lm/ts1lmr.fd
 File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
-<CustomerChurn_files/figure-latex/unnamed-chunk-6-1.pdf, id=34, 469.755pt x 325.215pt>
+<CustomerChurn_files/figure-latex/unnamed-chunk-6-1.pdf, id=47, 469.755pt x 325.215pt>
 File: CustomerChurn_files/figure-latex/unnamed-chunk-6-1.pdf Graphic file (type pdf)
 <use CustomerChurn_files/figure-latex/unnamed-chunk-6-1.pdf>
-Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-6-1.pdf  used on input line 247.
+Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-6-1.pdf  used on input line 263.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-
-
-[2{/home/muhammad/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}]
-
-[3 <./CustomerChurn_files/figure-latex/unnamed-chunk-6-1.pdf>]
-<CustomerChurn_files/figure-latex/unnamed-chunk-7-1.pdf, id=56, 469.755pt x 325.215pt>
+<CustomerChurn_files/figure-latex/unnamed-chunk-7-1.pdf, id=48, 469.755pt x 325.215pt>
 File: CustomerChurn_files/figure-latex/unnamed-chunk-7-1.pdf Graphic file (type pdf)
 <use CustomerChurn_files/figure-latex/unnamed-chunk-7-1.pdf>
-Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-7-1.pdf  used on input line 263.
+Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-7-1.pdf  used on input line 281.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<CustomerChurn_files/figure-latex/unnamed-chunk-8-1.pdf, id=57, 469.755pt x 325.215pt>
+
+
+[3{/home/muhammad/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc} <./CustomerChurn_files/figure-latex/unnamed-chunk-6-1.pdf>]
+<CustomerChurn_files/figure-latex/unnamed-chunk-8-1.pdf, id=63, 469.755pt x 325.215pt>
 File: CustomerChurn_files/figure-latex/unnamed-chunk-8-1.pdf Graphic file (type pdf)
 <use CustomerChurn_files/figure-latex/unnamed-chunk-8-1.pdf>
-Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-8-1.pdf  used on input line 274.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<CustomerChurn_files/figure-latex/unnamed-chunk-9-1.pdf, id=58, 469.755pt x 325.215pt>
-File: CustomerChurn_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
-<use CustomerChurn_files/figure-latex/unnamed-chunk-9-1.pdf>
-Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-9-1.pdf  used on input line 281.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<CustomerChurn_files/figure-latex/unnamed-chunk-10-1.pdf, id=59, 469.755pt x 325.215pt>
-File: CustomerChurn_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf)
-<use CustomerChurn_files/figure-latex/unnamed-chunk-10-1.pdf>
-Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-10-1.pdf  used on input line 287.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<CustomerChurn_files/figure-latex/unnamed-chunk-11-1.pdf, id=60, 469.755pt x 325.215pt>
-File: CustomerChurn_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf)
-<use CustomerChurn_files/figure-latex/unnamed-chunk-11-1.pdf>
-Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-11-1.pdf  used on input line 293.
+Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-8-1.pdf  used on input line 292.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
 [4 <./CustomerChurn_files/figure-latex/unnamed-chunk-7-1.pdf>]
+<CustomerChurn_files/figure-latex/unnamed-chunk-9-1.pdf, id=73, 469.755pt x 325.215pt>
+File: CustomerChurn_files/figure-latex/unnamed-chunk-9-1.pdf Graphic file (type pdf)
+<use CustomerChurn_files/figure-latex/unnamed-chunk-9-1.pdf>
+Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-9-1.pdf  used on input line 301.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
 
 [5 <./CustomerChurn_files/figure-latex/unnamed-chunk-8-1.pdf>]
+<CustomerChurn_files/figure-latex/unnamed-chunk-10-1.pdf, id=84, 469.755pt x 325.215pt>
+File: CustomerChurn_files/figure-latex/unnamed-chunk-10-1.pdf Graphic file (type pdf)
+<use CustomerChurn_files/figure-latex/unnamed-chunk-10-1.pdf>
+Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-10-1.pdf  used on input line 310.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
 
 [6 <./CustomerChurn_files/figure-latex/unnamed-chunk-9-1.pdf>]
+<CustomerChurn_files/figure-latex/unnamed-chunk-11-1.pdf, id=95, 469.755pt x 325.215pt>
+File: CustomerChurn_files/figure-latex/unnamed-chunk-11-1.pdf Graphic file (type pdf)
+<use CustomerChurn_files/figure-latex/unnamed-chunk-11-1.pdf>
+Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-11-1.pdf  used on input line 319.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+
 
 [7 <./CustomerChurn_files/figure-latex/unnamed-chunk-10-1.pdf>]
 
 [8 <./CustomerChurn_files/figure-latex/unnamed-chunk-11-1.pdf>]
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 334.
-(/home/muhammad/.TinyTeX/texmf-dist/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
 
 [9]
-<CustomerChurn_files/figure-latex/unnamed-chunk-13-1.pdf, id=121, 469.755pt x 325.215pt>
+<CustomerChurn_files/figure-latex/unnamed-chunk-13-1.pdf, id=126, 469.755pt x 325.215pt>
 File: CustomerChurn_files/figure-latex/unnamed-chunk-13-1.pdf Graphic file (type pdf)
 <use CustomerChurn_files/figure-latex/unnamed-chunk-13-1.pdf>
-Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-13-1.pdf  used on input line 425.
+Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-13-1.pdf  used on input line 446.
+(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
+<CustomerChurn_files/figure-latex/unnamed-chunk-14-1.pdf, id=127, 469.755pt x 325.215pt>
+File: CustomerChurn_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf)
+<use CustomerChurn_files/figure-latex/unnamed-chunk-14-1.pdf>
+Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-14-1.pdf  used on input line 462.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
 [10{/home/muhammad/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/home/muhammad/.TinyTeX/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc} <./CustomerChurn_files/figure-latex/unnamed-chunk-13-1.pdf>]
-<CustomerChurn_files/figure-latex/unnamed-chunk-14-1.pdf, id=138, 469.755pt x 325.215pt>
-File: CustomerChurn_files/figure-latex/unnamed-chunk-14-1.pdf Graphic file (type pdf)
-<use CustomerChurn_files/figure-latex/unnamed-chunk-14-1.pdf>
-Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-14-1.pdf  used on input line 448.
-(pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
-<CustomerChurn_files/figure-latex/unnamed-chunk-15-1.pdf, id=139, 469.755pt x 325.215pt>
+<CustomerChurn_files/figure-latex/unnamed-chunk-15-1.pdf, id=145, 469.755pt x 325.215pt>
 File: CustomerChurn_files/figure-latex/unnamed-chunk-15-1.pdf Graphic file (type pdf)
 <use CustomerChurn_files/figure-latex/unnamed-chunk-15-1.pdf>
-Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-15-1.pdf  used on input line 488.
+Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-15-1.pdf  used on input line 502.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
 [11 <./CustomerChurn_files/figure-latex/unnamed-chunk-14-1.pdf>] [12 <./CustomerChurn_files/figure-latex/unnamed-chunk-15-1.pdf>]
-<CustomerChurn_files/figure-latex/unnamed-chunk-17-1.pdf, id=171, 469.755pt x 325.215pt>
+<CustomerChurn_files/figure-latex/unnamed-chunk-17-1.pdf, id=176, 469.755pt x 325.215pt>
 File: CustomerChurn_files/figure-latex/unnamed-chunk-17-1.pdf Graphic file (type pdf)
 <use CustomerChurn_files/figure-latex/unnamed-chunk-17-1.pdf>
-Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-17-1.pdf  used on input line 557.
+Package pdftex.def Info: CustomerChurn_files/figure-latex/unnamed-chunk-17-1.pdf  used on input line 564.
 (pdftex.def)             Requested size: 469.75386pt x 325.2142pt.
 
 
 [13 <./CustomerChurn_files/figure-latex/unnamed-chunk-17-1.pdf>]
 
-[14] (./CustomerChurn.aux)
+[14]
+
+[15] (./CustomerChurn.aux)
  ***********
 LaTeX2e <2024-06-01> patch level 2
 L3 programming layer <2024-10-09>
@@ -700,18 +702,18 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 13112 strings out of 475537
- 204736 string characters out of 5777142
- 621222 words of memory out of 5000000
- 35461 multiletter control sequences out of 15000+600000
- 604907 words of font info for 78 fonts, out of 8000000 for 9000
+ 13104 strings out of 475537
+ 205330 string characters out of 5777142
+ 621641 words of memory out of 5000000
+ 35451 multiletter control sequences out of 15000+600000
+ 604588 words of font info for 77 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 89i,8n,93p,412b,586s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmtt10.pfb>
-Output written on CustomerChurn.pdf (14 pages, 284990 bytes).
+ 89i,8n,93p,412b,581s stack positions out of 10000i,1000n,20000p,200000b,200000s
+</home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx10.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr10.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr12.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr17.pfb></home/muhammad/.TinyTeX/texmf-dist/fonts/type1/public/lm/lmr7.pfb>
+Output written on CustomerChurn.pdf (15 pages, 263532 bytes).
 PDF statistics:
- 275 PDF objects out of 1000 (max. 8388607)
- 217 compressed objects within 3 object streams
- 52 named destinations out of 1000 (max. 500000)
- 107 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 292 PDF objects out of 1000 (max. 8388607)
+ 235 compressed objects within 3 object streams
+ 58 named destinations out of 1000 (max. 500000)
+ 131 words of extra memory for PDF output out of 10000 (max. 10000000)
 

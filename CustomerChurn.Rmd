@@ -12,6 +12,7 @@ output:
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   fig.pos = "H",
+  fig.align = 'center',
   cache = TRUE
 )
 ```
@@ -30,6 +31,11 @@ library(broom)
 ```
 
 
+# Abstract
+
+This research examines the factors that lead to customer churn in the telecommunications industry, with a case study of a telecommunications company. Using exploratory data analysis and predictive modeling, key variables such as SMS usage, calling plan, and customer age group are examined for their impact on churn. Logistic regression modeling with cross-validation provides insight into the accuracy of churn prediction and guides targeted retention strategies. Limitations and future enhancements to improve model accuracy and practical application are discussed.
+
+
 
 # Introduction
 
@@ -42,8 +48,12 @@ For a telecom company based in Iran, building an effective customer retention pr
 
 ## Data Cleaning
 
-Consistency of the dataset is important for meaningful data analysis, and we will make sure of it.
+Consistency of the dataset is important for meaningful data analysis, and we will ensure it.
 
+Our steps include:
+1. Rename columns for readability.
+2. Convert binary and categorical variables to factors.
+3. Check for missing values for data completeness.
 
 
 ```{r, include=F}
@@ -142,7 +152,7 @@ customer_churn_value <- customers |>
   filter(churn == "churn")
 ```
 
-```{r echo=FALSE, fig.cap="Figure 1 The Distribution of Calculated Customer Value and Churn", fig.pos = "H"}
+```{r echo=FALSE, fig.cap="Distribution of Calculated Customer Value and Churn"}
 ggplot(customer_churn_value, aes(x = customer_value)) +
   geom_histogram(bins = 30, color = "white") +
   labs(
@@ -158,7 +168,7 @@ Something to notice here that the figure is skewed to the right which in return 
 
 - Next we will see the most common values in non-churn customers.
 
-```{r echo=FALSE, fig.pos = "H"}
+```{r echo=FALSE}
 customer_non_churn_value <- customers |>
   filter(churn == "non-churn")
 
@@ -173,7 +183,7 @@ ggplot(customer_non_churn_value, aes(x = customer_value)) +
 
 - Figure 2 shows clustering or subgroups of customers with same values the most common value seems to be less than 500.
 
-```{r, echo=FALSE, fig.cap="Figure 3 Mean ifference in frequency of using sms between churn and non-churn customers", warning=FALSE, fig.pos = "H"}
+```{r, echo=FALSE, fig.cap="Average of using SMS between churn and non-churn", warning=FALSE}
 # Visualizing the relation between age_group and distinct calls
 ggplot(customers, aes(x = churn, y = frequency_of_sms)) +
   geom_boxplot(aes(fill = churn)) +
@@ -187,7 +197,7 @@ ggplot(customers, aes(x = churn, y = frequency_of_sms)) +
 ```
 
 
-```{r, echo=F, fig.cap="Figure 4 Mean total frequency of using sms and tariff plan", warning=F}
+```{r, echo=F, fig.cap="Average of using SMS and tariff plan", warning=F}
 ggplot(customers, aes(x = tariff_plan, y = frequency_of_sms)) +
   geom_boxplot(aes(fill = tariff_plan)) +
   stat_summary(fun = "mean", geom = "point", color = "red") +
@@ -201,7 +211,7 @@ ggplot(customers, aes(x = tariff_plan, y = frequency_of_sms)) +
 
 
 
-```{r, echo=F, fig.cap="Figure 5 frequency of using sms and age group", warning=F}
+```{r, echo=F, fig.cap="Frequency of using SMS and age group", warning=F}
 ggplot(customers, aes(x = age_group, y = frequency_of_sms)) +
   geom_boxplot(aes(fill = age_group)) +
   stat_summary(fun = "mean", geom = "point", color = "red") +
@@ -216,7 +226,7 @@ ggplot(customers, aes(x = age_group, y = frequency_of_sms)) +
 
 
 
-```{r echo=F, warning=F, fig.cap="Figure 6 Distribution of Frequency of Using SMS"}
+```{r echo=F, warning=F, fig.cap="Distribution of Frequency SMS"}
 ggplot(customers, aes(x = frequency_of_sms)) +
   geom_histogram(binwidth = 30, col = "white") +
   labs(
@@ -281,8 +291,6 @@ cor_matrix <- customers |>
   group_by(churn) |>
   summarize(cor = cor(charge_amount, frequency_of_use))
 
-cor_matrix
-
 
 
 kable(summ_stat_non_chrun, digits = 2, caption = "Summary statistics for non-churn customers") |>
@@ -306,7 +314,7 @@ kable(cor_matrix, , digits = 2, caption = "The correlation between frequecy of u
 
 - **Assessing the significance in differences**
 
-- Since we are going to conduct a hypothesis tests here we set our level of rejection (i.e meaning that the risk of rejecting the null hypothesis when it is true) to be 5%.
+- Conducting hypothesis test here compare the difference, we set our level of rejection (i.e meaning that the risk of rejecting the null hypothesis when it is true) to be 5%.
 
 Figure 3 illustrates the difference in frequency of SMS usage between churn and non churn customers.Before drawing any conclusions, we will check if the difference is statistically discernible (i.e significant).
 
@@ -337,19 +345,20 @@ null_distn |>
   shade_p_value(obs = observed_statistic, direction = "both")
 
 # Get p-value
-pvalue <- null_distn |>
+pvalue1 <- null_distn |>
   get_pvalue(obs_stat = observed_statistic, direction = "both")
 
-pvalue
+
 ```
 
-Here the the p-value is 0 that i.e (the compatibility of data and the null hypothesis), we can conclude that we have a convincing evidence to reject the null hypothesis.
+Here the the p-value `r pvalue1$p_value` that i.e (the compatibility of data and the null hypothesis), we can conclude that we have a convincing evidence to reject the null hypothesis.
 
 Indicating that there are real differences between churn and non-churn in frequency of SMS usage.
 
 -   To quantify the difference, we will construct a confidence interval for the difference in **SMS usage** :
 
 ```{r, echo=FALSE, warning=FALSE}
+set.seed(123)
 t_hat <- customers |>
   specify(frequency_of_sms ~ churn) |>
   calculate(stat = "t", order = c("non-churn", "churn"))
@@ -400,10 +409,10 @@ null_distn |>
 pvalue <- null_distn |>
   get_pvalue(obs_stat = observed_statistic, direction = "both")
 
-pvalue
+
 ```
 
--   Since the p-value is 0, we can say that we have a convincing evidence to reject the null hypothesis.
+-   Since the p-value is `r pvalue$p_value`, we can say that we have a convincing evidence to reject the null hypothesis.
 
 Indicating that there are real differences between tariff plans in frequency of SMS usage.
 
@@ -445,6 +454,8 @@ kable(model_tidy, caption = "A table for logistic regression based-model") |>
 
 
 ```{r, echo=F, warning=F}
+set.seed(123)
+
 # Check the model assumptions
 customers$fitted_probs <- predict(glm.fits, type = "response")
 
@@ -491,6 +502,8 @@ The plot compares predicted probabilities (x-axis) with observed probabilities (
 To do so we will use 5-fold cross-validation
 
 ```{r, echo=FALSE}
+set.seed(123)
+
 # Check the model accuracy
 train_control <- trainControl(method = "cv", number = 5)
 
@@ -509,6 +522,8 @@ The accuracy of the model is **`r results`**.
 - We can evaluate the model in another way using confusion matrix :
 
 ```{r echo=FALSE}
+set.seed(123)
+
 # Initialize predictions as "No Churn"
 customers$predicted_churn <- rep("non-churn", nrow(customers))
 
@@ -531,6 +546,8 @@ But this accuracy might be **misleading** because the model was trained and test
 We will take the same steps but training and testing on different data sets.
 
 ```{r, echo=FALSE}
+set.seed(123)
+
 # Create training data set
 train_data <- customers$age < 30
 
@@ -567,11 +584,12 @@ The accuracy rate here is `r accuracy` and Miss-classification rate is `r Misscl
 For example when (call failure is 8, 10), (charge_amount 1, 3), (frequency of sms 10, 14) and (frequency_of_use 82, 44) :
 
 ```{r echo=FALSE, warning=FALSE}
-predic_churn <- 
-round(predict(glm.fits,
-  newdata = data.frame(call_failure = c(8, 10), charge_amount = c(1, 3), frequency_of_sms = c(10, 14), frequency_of_use = c(82, 44)),
-  type = "response"
-), 2)
+set.seed(123)
+predic_churn <-
+  round(predict(glm.fits,
+    newdata = data.frame(call_failure = c(8, 10), charge_amount = c(1, 3), frequency_of_sms = c(10, 14), frequency_of_use = c(82, 44)),
+    type = "response"
+  ), 2)
 
 kable(predic_churn, caption = "Probability of churning for certain customers")
 ```
@@ -585,3 +603,17 @@ But we should be careful about **extrapolations**. In other words, just because 
 ## Conclusion
 
 Our model, with an accuracy rate of 0.85, offers valuable predictive power, meaning the company can identify customers at risk of churn and intervene with tailored retention strategies. While some miss-classifications occurred, the model still provides strong actionable insights.
+
+
+# Limitations 
+
+-  **Observational Data**: Since this is an observational study, causality cannot be established. While the model can predict the likelihood of churn, it does not identify the exact causes behind customer decisions to leave. This means any results should be interpreted as a correlation, not causation.
+
+
+- **Potential Biases**: The data is limited to one telecom company, we may not be able to generalize to other sectors or regions.
+
+# Future improvment
+
+1. Experimentation for Causal Inference.
+
+2. Considering more external Factors.
