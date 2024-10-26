@@ -11,11 +11,8 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
-	fig.align = "center",
-	fig.pos = "H",
-	warning = FALSE,
-	message = FALSE,
-	cache = TRUE
+  fig.pos = "H",
+  cache = TRUE
 )
 ```
 
@@ -32,6 +29,8 @@ library(caret)
 library(broom)
 ```
 
+
+
 # Introduction
 
 Customer attrition, or churn, is a critical challenge for businesses, especially in competitive industries like telecommunications.[**"Becuase retaining existing customers is more profitable than acquiring new customers, primarily due to savings in acquisition costs, higher volume of service consumption, and customer referrals."**](https://en.wikipedia.org/wiki/Customer_attrition#Research)
@@ -45,13 +44,18 @@ For a telecom company based in Iran, building an effective customer retention pr
 
 Consistency of the dataset is important for meaningful data analysis, and we will make sure of it.
 
-Here is a snapshot of the original dataset:
 
 
 ```{r, include=F}
 # load the data set
 customers <- read.csv("Customer Churn.csv")
 ```
+
+
+
+Here is a snapshot of the original dataset:
+
+
 
 ```{r echo=FALSE}
 first_snapshot <- customers |>
@@ -61,8 +65,11 @@ kable(
   first_snapshot |>
     select(1:6),
   caption = "A snapshot of the orginal dataset"
-) 
+)
 ```
+
+
+
 
 Here is a snapshot of the dataset after cleaning:
 
@@ -97,7 +104,6 @@ colnames(second_snapshot) <- str_to_title(colnames(second_snapshot))
 kable(
   second_snapshot |>
     select(1:6),
-  booktabs = TRUE,
   caption = "A snapshot of the cleanded dataset"
 ) |>
   kable_styling(latex_options = c("striped", "hold_position"))
@@ -105,7 +111,6 @@ kable(
 kable(
   second_snapshot |>
     select(7:12),
-  booktabs = TRUE,
   caption = "A snapshot of the cleanded dataset"
 ) |>
   kable_styling(latex_options = c("striped", "hold_position"))
@@ -113,7 +118,6 @@ kable(
 kable(
   second_snapshot |>
     select(13:14),
-  booktabs = TRUE,
   caption = "A snapshot of the cleanded dataset"
 ) |>
   kable_styling(latex_options = c("striped", "hold_position"))
@@ -431,11 +435,11 @@ kable(model_tidy, caption = "A table for logistic regression based-model") |>
 
 
 
-- Table 5 summarizes the logistic regression model after backward selection, showing only the variables with significant p-values.
+- Table 9 summarizes the logistic regression model after backward selection, showing only the variables with significant p-values.
 
 2.For the logistic regression model to provide valid results, certain assumptions must be satisfied :
 
-**Independecy**: The data has been collected randomly, so we assume suffeciency in this condition.
+**Independence**: The data has been collected randomly, so we assume sufficiency in this condition.
 
 **Linearity**: Which for this condition to work linear relationship between logit and predictor variables needs to exist:
 
@@ -481,6 +485,7 @@ ggplot(bucket_summary, aes(x = avg_predicted, y = observed)) +
 
 The plot compares predicted probabilities (x-axis) with observed probabilities (y-axis). The points should cluster around the red diagonal line (representing perfect predictions). This indicates that the model’s linearity assumption holds since the observed probabilities match predicted values closely.
 
+
 3. After checking the conditions, we check the accuracy of the model (i.e how much the model can explain the churn variable).
 
 To do so we will use 5-fold cross-validation
@@ -501,7 +506,7 @@ results <- round(model$results$Accuracy, 2)
 
 The accuracy of the model is **`r results`**.
 
-- We can evaluate the model in another way here it is :
+- We can evaluate the model in another way using confusion matrix :
 
 ```{r echo=FALSE}
 # Initialize predictions as "No Churn"
@@ -510,10 +515,14 @@ customers$predicted_churn <- rep("non-churn", nrow(customers))
 # Replace "No Churn" with "Churn" for probabilities > 0.5
 customers$predicted_churn[customers$fitted_probs > 0.5] <- "churn"
 
-table(customers$predicted_churn, customers$churn)
+matrix <- table(customers$predicted_churn, customers$churn)
+
+kable(matrix, caption = "Confusion matrix")
 
 mean_perd <- round(mean(customers$predicted_churn == customers$churn), 2)
 ```
+
+
 
 The table there is telling true negatives, positives, and false negatives and positives(i.e how many predictions that our model got it right and it was about `r mean_perd`).
 
@@ -539,25 +548,34 @@ glm.pred <- rep("non-churn", nrow(customers.30))
 # Replace "No Churn" with "Churn" for probabilities > 0.5
 glm.pred[glm.probs > 0.5] <- "churn"
 
-table(glm.pred, customers.30$churn)
+matrix1 <- table(glm.pred, customers.30$churn)
+
+kable(matrix1, caption = "More accurate evaluation on training and testing set")
 
 # Accuracy rate
 accuracy <- round(mean(glm.pred == customers.30$churn), 2)
 
-# Missclassification rate
+# Miss-classification rate
 Missclassification_rate <- round(mean(glm.pred != customers.30$churn), 2)
 ```
 
-The accuracy rate here is `r accuracy` and Missclassification rate is `r Missclassification_rate`.
 
-4. Model predictions. We can use the model we to apply it only on certain customers :
+The accuracy rate here is `r accuracy` and Miss-classification rate is `r Missclassification_rate`.
+
+4. Model predictions. We plug in some values to the model and get the probability of churning :
+
+For example when (call failure is 8, 10), (charge_amount 1, 3), (frequency of sms 10, 14) and (frequency_of_use 82, 44) :
 
 ```{r echo=FALSE, warning=FALSE}
+predic_churn <- 
 round(predict(glm.fits,
   newdata = data.frame(call_failure = c(8, 10), charge_amount = c(1, 3), frequency_of_sms = c(10, 14), frequency_of_use = c(82, 44)),
   type = "response"
 ), 2)
+
+kable(predic_churn, caption = "Probability of churning for certain customers")
 ```
+
 
 
 [**As the task at hand is only to do prediction and not to interpret coefficients, a model that suffers from high multicollinearity will likely lead to unbiased predictions of the response variable. So multicollinearity is likely to not cause any substantial problems.**](https://openintro-ims.netlify.app/inf-model-mlr)
@@ -566,4 +584,4 @@ But we should be careful about **extrapolations**. In other words, just because 
 
 ## Conclusion
 
-Our model, with an accuracy rate of 0.85, offers valuable predictive power, meaning the company can identify customers at risk of churn and intervene with tailored retention strategies. While some misclassification occurred, the model still provides strong actionable insights.
+Our model, with an accuracy rate of 0.85, offers valuable predictive power, meaning the company can identify customers at risk of churn and intervene with tailored retention strategies. While some miss-classifications occurred, the model still provides strong actionable insights.
