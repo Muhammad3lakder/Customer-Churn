@@ -31,6 +31,8 @@ library(skimr)
 library(stringr)
 library(caret)
 library(broom)
+library(scales)
+library(ggthemes)
 ```
 
 
@@ -162,7 +164,9 @@ ggplot(customer_churn_value, aes(x = customer_value)) +
     title = "Distribution of Customer Value in Churn Customers",
     x = "Customer Value",
     y = "Count"
-  )
+  ) +
+  theme_minimal() +
+  scale_fill_colorblind()
 ```
 
 - Figure 1 shows that the most common values is zero which is not expected here it could be due to a missing value or real effect.
@@ -181,7 +185,9 @@ ggplot(customer_non_churn_value, aes(x = customer_value)) +
     title = "Distribution of Customer Value in Non-churn Customers",
     x = "Customer Value",
     y = "Count"
-  )
+  ) +
+  theme_minimal() +
+  scale_fill_colorblind()
 ```
 
 - Figure 2 shows clustering or subgroups of customers with same values the most common value seems to be less than 500.
@@ -196,7 +202,8 @@ ggplot(customers, aes(x = churn, y = frequency_of_sms)) +
     x = "Churn",
     y = "Frequency of Using SMS"
   ) +
-  theme_classic()
+  theme_minimal() +
+  scale_fill_colorblind()
 ```
 
 
@@ -209,7 +216,8 @@ ggplot(customers, aes(x = tariff_plan, y = frequency_of_sms)) +
     x = "Frequency of Using SMS",
     y = "Tariff Plan"
   ) +
-  theme_classic()
+  theme_minimal() +
+  scale_fill_colorblind()
 ```
 
 
@@ -223,7 +231,8 @@ ggplot(customers, aes(x = age_group, y = frequency_of_sms)) +
     x = "Frequency of Using SMS",
     y = "Age Group"
   ) +
-  theme_classic()
+  theme_minimal() +
+  scale_fill_colorblind()
 ```
 
 
@@ -237,7 +246,9 @@ ggplot(customers, aes(x = frequency_of_sms)) +
     y = "Count",
     x = "Frequency of Using SMS"
   ) +
-  coord_cartesian(xlim = c(0, 100))
+  coord_cartesian(xlim = c(0, 100)) +
+  theme_minimal() +
+  scale_fill_colorblind()
 ```
 
 
