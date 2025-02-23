@@ -1,0 +1,538 @@
+---
+title: "CustomerChurn"
+author: "Muhammad Alakder"
+date: "2024-10-03"
+output:
+  pdf_document:
+    toc: true
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, include=F}
+library(tidyverse)
+library(janitor)
+library(knitr)
+library(kableExtra)
+library(infer)
+library(skimr)
+library(stringr)
+library(caret)
+library(broom)
+```
+
+
+
+# Introduction
+
+A telecom company based in Iran has been operating in the field for some time without many problems.
+
+When a new company enters the telecom market, one of their concerns became that their customers will churn due to competitive pressure.
+
+Although there are many ways to address such a problem, we will help the company by using their customer data.
+
+Our goal is to understand what makes their customers leave, what makes them stay, and to predict the number of customers who might leave.
+
+# Methodology
+
+The dataset we will use is from [Iranian telecom company](https://doi.org/10.24432/C5JW3Z), collected randomly over a 12 month period.
+
+Here is a snapshot of the original dataset:
+
+```{r, include=F}
+
+# load the data set
+customers <- read.csv("Customer Churn.csv")
+```
+
+
+```{r echo=F}
+first_snapshot <- customers |>
+  sample_n(5)
+
+kable(
+  first_snapshot |>
+    select(1:6),
+  caption = "A snapshot of the orginal dataset") |>
+  kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+## Data Cleaning
+
+The data as we have seen in table 1 needs some cleaning for easier analysis later.
+
+Here is a snapshot of the dataset after cleaning:
+
+```{r echo=FALSE}
+# Cleaning up the data
+
+# Making sure the names are unique and consistent
+customers <- customers |>
+  clean_names()
+
+# Changing binary variables into categorical variables
+customers$age_group <- factor(customers$age_group)
+
+customers$churn <- factor(customers$churn, levels = c(0, 1), labels = c("non-churn", "churn"))
+
+customers$tariff_plan <- factor(customers$tariff_plan, levels = c(1, 2), labels = c("Pay as you go", "Contractual"))
+
+customers$complains <- factor(customers$complains, levels = c(0, 1), labels = c("No complaint", "complaint"))
+
+customers$status <- factor(customers$status, levels = c(1, 2), labels = c("Acitve", "Non-active"))
+
+# Checking for missing values
+# sum(is.na(customers))
+
+second_snapshot <- customers |>
+  sample_n(5)
+
+kable(
+  second_snapshot |>
+    select(1:6),
+  caption = "A snapshot of the cleanded dataset") |>
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+kable(
+  second_snapshot |>
+    select(7:12),
+  caption = "A snapshot of the cleanded dataset") |>
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+kable(
+  second_snapshot |>
+    select(13:14),
+  caption = "A snapshot of the cleanded dataset") |>
+  kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+## Exploratory data analysis
+
+To address the question from before we will start by raising some question then explore them :
+
+1. What are the most and least common values that within data?
+
+2. Are there any unusual patterns?
+
+3. Are there any correlation within the data?
+
+
+Will start with calculated customer value in customers who left.
+
+```{r include=FALSE}
+customer_churn_value <- customers |>
+  filter(churn == "churn")
+```
+
+```{r echo=FALSE, fig.cap="Figure 1 The Distribution of Calculated Customer Value and Churn"}
+
+ggplot(customer_churn_value, aes(x = customer_value)) +
+  geom_histogram(bins = 30, color = "white") +
+  labs(
+    title = "Distribution of Customer Value in Churn Customers",
+    x = "Customer Value",
+    y = "Count"
+  )
+```
+
+
+- Figure 1 shows that the most common values is zero which is not expected here it could be due to a missing value or real effect.
+
+Something to notice here that the figure is skewed to the right which in return might not represent the customers as they are we will address this problem later.
+
+- Next we will see the most common values in non-churn customers.
+```{r echo=FALSE, fig.cap="Figure 2 Distribution of Customer Value in Non-churn Customers"}
+customer_non_churn_value <- customers |>
+  filter(churn == "non-churn")
+
+ggplot(customer_non_churn_value, aes(x = customer_value)) +
+  geom_histogram(bins = 30, color = "white") +
+  labs(
+    title = "Distribution of Customer Value in Non-churn Customers",
+    x = "Customer Value",
+    y = "Count"
+  )
+```
+
+- Figure 2 shows clustering or subgroups of customers with same values the most common value seems to be less than 500.
+
+
+- Could there be a difference in SMS usage ?
+
+```{r, echo=FALSE, fig.cap="Figure 3 Mean ifference in frequency of using sms between churn and non-churn customers", warning=FALSE}
+# Visualizing the relation between age_group and distinct calls
+ggplot(customers, aes(x = churn, y = frequency_of_sms)) +
+  geom_boxplot(aes(fill = churn)) +
+  stat_summary(fun = "mean", geom = "point", color = "red") +
+  labs(
+    title = "Mean Difference in Total Frequency of Using SMS",
+    x = "Churn",
+    y = "Frequency of Using SMS"
+  ) +
+  theme_classic()
+```
+
+- Figure 3 shows mean difference in frequency using of between churn and non-churn customers.
+
+```{r, echo=F, fig.cap="Figure 4 Mean total frequency of using sms and tariff plan", warning=F}
+ggplot(customers, aes(x = tariff_plan, y = frequency_of_sms)) +
+  geom_boxplot(aes(fill = tariff_plan)) +
+  stat_summary(fun = "mean", geom = "point", color = "red") 
+labs(
+  title = "Frequency of Using SMS and Tariff plan",
+  x = "Frequency of Using SMS",
+  y = "Tariff Plan"
+) +
+  theme_classic()
+```
+
+- In figure 4 even though there is an overlap between the plans in frequency of SMS usage still there is a difference in mean, indicating may there is an association between tariff plan and customers churning but further analysis is needed here.
+
+```{r, echo=F, fig.cap="Figure 5 frequency of using sms and age group", warning=F}
+ggplot(customers, aes(x = age_group, y = frequency_of_sms)) +
+  geom_boxplot(aes(fill = age_group)) +
+  stat_summary(fun = "mean", geom = "point", color = "red")
+labs(
+  title = "Frequency of Using SMS and Age Group",
+  x = "Frequency of Using SMS",
+  y = "Age Group"
+) +
+  theme_classic()
+```
+
+- As we have seen in Figure 5 so there seems to be an association between frequency of use, SMS usage, age groups (like in this figure) and the choice of customers either leaving of staying.
+
+A further analysis is coming here, to confirm if the company needs to enhance their way delivering messaging system, tariff plans and maybe tailoring marketing strategy more toward certain age groups.
+
+```{r echo=F, warning=F, fig.cap="Figure 6 Distribution of Frequency of Using SMS"}
+ggplot(customers, aes(x = frequency_of_sms)) +
+  geom_histogram(binwidth = 30, col = "white") +
+  labs(
+    title = "Distribution of Frequency of Using SMS",
+    y = "Count",
+    x = "Frequency of Using SMS"
+  ) +
+  coord_cartesian(xlim = c(0, 100))
+```
+
+- In figure 6 we can see that the most common value is zero, raising questions here like :
+
+1. Is it plausible that usage of SMS is zero for most of customers?
+
+2. The figure is skewed to the right indicating non-normality, what could be the real value ?
+
+- The zero usage of the messages could happen for some customers so dropping the values won`t do much here.
+
+But since the data is randomly selected we can go about using bootstrap to see if there is a meaningful difference in the statistical analysis part.
+
+```{r, echo=FALSE, warning=FALSE}
+# Getting summary stats
+summ_stat_non_chrun <- customers |>
+  filter(churn == "non-churn") |>
+  select(where(is.numeric)) |>
+  skim()
+
+summ_stat_non_chrun <- summ_stat_non_chrun |>
+  select(!c(skim_type, n_missing, complete_rate, numeric.hist))
+
+colnames(summ_stat_non_chrun) <- str_replace(colnames(summ_stat_non_chrun), "skim_variable", "Variable Name")
+
+colnames(summ_stat_non_chrun) <- str_remove_all(colnames(summ_stat_non_chrun), "numeric.")
+
+summ_stat_chrun <- customers |>
+  filter(churn == "churn") |>
+  select(where(is.numeric)) |>
+  skim()
+
+summ_stat_chrun <- summ_stat_chrun |>
+  select(!c(skim_type, n_missing, complete_rate, numeric.hist))
+
+colnames(summ_stat_chrun) <- str_replace(colnames(summ_stat_chrun), "skim_variable", "Variable Name")
+
+colnames(summ_stat_chrun) <- str_remove_all(colnames(summ_stat_chrun), "numeric.")
+
+
+
+cor_matrix <- customers |>
+  group_by(churn) |>
+  summarize(cor = cor(charge_amount, frequency_of_use))
+
+cor_matrix
+
+
+
+kable(summ_stat_non_chrun, digits = 2, caption = "Summary statistics for non-churn customers" ) |>
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+kable(summ_stat_chrun, digits = 2, caption = "Summary statistics for churn customers") |>
+  kable_styling(latex_options = c("striped", "hold_position"))
+
+kable(cor_matrix, , digits = 2, caption = "The correlation between frequecy of use and charge amount") |>
+  kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+- The summary in table 5 and 6 shows a difference in means between customers who stayed in the company for example the mean for frequency of using **SMS** is higher in customers who stayed.
+
+
+## Statistical analysis
+
+- Here will go about seeing the differences that we have seen so are real.
+
+Since we are going to conduct a hypothesis tests here we set our level of rejection (i.e significant level) to be .05.
+
+Figure 1 is showing a difference in frequency of SMS usage between churn and non churn customers.
+
+before continuing we will check if the difference is statistically discernible (i.e significant).
+
+As this will inform us about the customer behavior.
+
+To do so we will conduct a hypothesis test :
+
+1.  **Null hypothesis**{$H_0$} There is no difference in mean of frequency of SMS usage between churn and non churn customers.
+
+2.  **Alternative hypothesis**{$H_0$} There is a difference in mean of SMS usage between the churn and non churn customers.
+
+```{r, echo=FALSE, warning=FALSE}
+set.seed(123)
+
+# calculate the observed statistic
+observed_statistic <- customers |>
+  specify(frequency_of_sms ~ churn) |>
+  calculate(stat = "diff in means", order = c("non-churn", "churn"))
+
+null_distn <- customers |>
+  specify(frequency_of_sms ~ churn) |>
+  hypothesize(null = "independence") |>
+  generate(reps = 1000, type = "permute") |>
+  calculate(stat = "diff in means", order = c("non-churn", "churn"))
+
+null_distn |>
+  visualize() +
+  shade_p_value(obs = observed_statistic, direction = "both")
+
+# Get p-value
+pvalue <- null_distn |>
+  get_pvalue(obs_stat = observed_statistic, direction = "both")
+
+pvalue
+```
+
+- Here the the p-value is 0 that i.e (the compatibility of data and the null hypothesis), we can conclude that we have a convincing evidence to reject the null hypothesis.
+
+Indicating that there are real differences between churn and non-churn in frequency of SMS usage.
+
+-   Further we construct confidence interval for this difference
+
+```{r, echo=FALSE, warning=FALSE}
+t_hat <- customers |>
+  specify(frequency_of_sms ~ churn) |>
+  calculate(stat = "t", order = c("non-churn", "churn"))
+
+boot_dist <- customers |>
+  specify(frequency_of_sms ~ churn) |>
+  generate(reps = 1000, type = "bootstrap") |>
+  calculate(stat = "t", order = c("non-churn", "churn"))
+
+standard_error_ci <- boot_dist |>
+  get_ci(type = "se", point_estimate = t_hat)
+
+visualize(boot_dist) +
+  shade_confidence_interval(endpoints = standard_error_ci)
+
+kable(standard_error_ci , digits = 2, caption = "95% level of confidence in the range of differences in churn and non-churn customers") |>
+  kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+- As for the tariff plan in Figure 2 is showing a difference in frequency of SMS usage before continuing we will check if the difference is statistically discernible (i.e significant).
+
+As this will inform us about the customer behavior.
+
+To do so we will conduct a hypothesis test :
+
+1.  **Null hypothesis**{$Hnull$} There is no difference in mean of frequency of SMS usage between the two tariff plans.
+
+2. **Alternative hypothesis{$A$}** There is a difference in mean of SMS usage between the two tariff plans.
+
+```{r, echo=FALSE, warning=FALSE}
+set.seed(123)
+
+# calculate the observed statistic
+observed_statistic <- customers |>
+  specify(frequency_of_sms ~ tariff_plan) |>
+  calculate(stat = "diff in means", order = c("Contractual", "Pay as you go"))
+
+null_distn <- customers |>
+  specify(frequency_of_sms ~ tariff_plan) |>
+  hypothesize(null = "independence") |>
+  generate(reps = 1000, type = "permute") |>
+  calculate(stat = "diff in means", order = c("Contractual", "Pay as you go"))
+
+null_distn |>
+  visualize() +
+  shade_p_value(obs = observed_statistic, direction = "both")
+
+# Get p-value
+pvalue <- null_distn |>
+  get_pvalue(obs_stat = observed_statistic, direction = "both")
+
+pvalue
+```
+
+- Since the p-value is 0, we can say that we have a convincing evidence to reject the null hypothesis.
+
+Indicating that there are real differences between tariff plans in frequency of SMS usage.
+
+An implication for the company might be asking what can make their messaging system more attractive.
+
+Even though there are limitation to this analysis that needs to be considered, we will discuss it later.
+
+## Predictions
+
+- In general uncertainty is a driving factor of fear in decision making and taking actions.
+
+Our aim here is to predict customer behavior (ex. churn, package use, etc..), with a certain level of accuracy using the existing data.
+
+So we can in making informed decisions like allocating resources efficiently.
+
+- We will start by fitting a model that predict, the type of model will logistic regression and to do so we will these step :
+
+1. Fitting the model.
+```{r, echo=FALSE, warning=FALSE}
+set.seed(123)
+
+# Fit a model by using backward selection of variables
+glm.fits <- glm(churn ~ call_failure + charge_amount + frequency_of_sms + frequency_of_use, frequency_of_sms, data = customers, family = binomial)
+
+# Putting the model in a tidy format
+model_tidy <- glm.fits |>
+  tidy(conf.int = TRUE) |>
+  mutate_if(is.numeric, round, digits = 2) |>
+  clean_names()
+
+kable(model_tidy, caption = "A table for logistic regression based-model") |>
+  kable_styling(latex_options = c("striped", "hold_position"))
+```
+
+To get that model we used backward selection (i.e dropping variables with high p-value), the very low p-values from output tell us that four of the variables act as statistically discernible predictors in the model at the discernibility level of 0.05, despite the inclusion of any of the other variables.
+
+2. But certain conditions needs to be met for this model to work properly :
+
+- **Independecy**: The data has been collected randomly, so we assume suffeciency in this condition.
+
+- **Linearity**: Which for this condition to work linear relationship between logit and predictor variables needs to exist:
+
+```{r, echo=F, warning=F}
+# Check the model assumptions
+customers$fitted_probs <- predict(glm.fits, type = "response")
+
+# Create buckets for fitted probabilities
+customers$bucket <- cut(customers$fitted_probs,
+  breaks = seq(0, 1, by = 0.1),
+  include.lowest = TRUE
+)
+
+# Calculate Average Predicted Probability
+bucket_summary <- customers |>
+  group_by(bucket) |>
+  summarize(
+    avg_predicted = mean(fitted_probs),
+    observed = mean(as.numeric(churn) - 1),
+    n = n()
+  )
+
+#  Calculate the Observed Probability and 95% Confidence Interval
+bucket_summary <- bucket_summary |>
+  mutate(
+    se = sqrt((observed * (1 - observed)) / n),
+    lower_ci = pmax(0, observed - 1.96 * se), # Lower bound
+    upper_ci = pmin(1, observed + 1.96 * se)
+  ) # Upper bound
+
+# Plot the results
+# Create the plot
+ggplot(bucket_summary, aes(x = avg_predicted, y = observed)) +
+  geom_point() +
+  geom_errorbar(aes(ymin = lower_ci, ymax = upper_ci), width = 0.02) +
+  labs(x = "Average Predicted Probability", y = "Observed Probability") +
+  theme_minimal() +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", color = "red")
+```
+
+The plot here shows the averaged probabilities from the prediction model.
+
+The values seems to be hovering around the line in which we can assume linearity condition is met.
+
+3. After checking the conditions, we check the accuracy of the model (i.e how much the model can explain the churn variable).
+
+To do so we used cross-validation.
+
+```{r, echo=FALSE}
+# Check the model accuracy
+train_control <- trainControl(method = "cv", number = 5)
+
+model <- train(churn ~ call_failure + charge_amount + frequency_of_sms + frequency_of_use,
+  data = customers,
+  method = "glm",
+  family = binomial,
+  trControl = train_control
+)
+
+results <- round(model$results$Accuracy, 2)
+```
+
+The accuracy of the model is **`r results`**.
+
+
+- We can go about predicting using the model we built, and check also the accuracy more.
+
+```{r echo=FALSE}
+
+# Initialize predictions as "No Churn"
+customers$predicted_churn <- rep("non-churn", nrow(customers))
+
+# Replace "No Churn" with "Churn" for probabilities > 0.5
+customers$predicted_churn[customers$fitted_probs > 0.5] <- "churn"
+
+table(customers$predicted_churn, customers$churn)
+
+mean_perd <- round(mean(customers$predicted_churn == customers$churn), 2)
+```
+
+- The table there is telling true negatives, positives, and false negatives and positives(i.e how many predictions that our model got it right and it was about `r mean_perd`).
+
+- But this accuracy might be misleading because the model was trained and tested on the same data set.
+
+We will take the same steps but training and testing on different data sets.
+
+```{r, echo=FALSE}
+
+# Create training data set
+train_data <- customers$age < 30
+
+customers.30 <- customers[!train_data, ]
+
+# Fit the model
+glm.fits2 <- glm(churn ~ call_failure + charge_amount + frequency_of_sms + frequency_of_use, frequency_of_sms, data = customers, family = binomial, subset = train_data)
+
+glm.probs <- predict(glm.fits2, customers.30, type = "response")
+
+
+# Initialize predictions as "No Churn"
+glm.pred <- rep("non-churn", nrow(customers.30))
+
+# Replace "No Churn" with "Churn" for probabilities > 0.5
+glm.pred[glm.probs > 0.5] <- "churn"
+
+table(glm.pred, customers.30$churn)
+
+# Accuracy
+round(mean(glm.pred == customers.30$churn), 2)
+
+# Missclassification rate
+round(mean(glm.pred != customers.30$churn), 2)
+```
+
